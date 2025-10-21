@@ -66,50 +66,87 @@ function Gamecontroller(){
         return false;
     };
 
+    const container = document.getElementById("container");
+
+
+    const createBoardUI = () => {
+        container.innerHTML = ""; 
+        gameboard.getGameboard().forEach((field, index) => {
+            const fieldDiv = document.createElement("div");
+            fieldDiv.classList.add("field");
+            fieldDiv.dataset.index = index;
+            fieldDiv.textContent = field;
+            container.appendChild(fieldDiv);
+
+
+            fieldDiv.addEventListener("click", () => {
+                playRound(index);
+            });
+        });
+    };
+
+  
+    const updateDisplay = () => {
+        const fields = document.querySelectorAll(".field");
+        fields.forEach((field, index) => {
+            field.textContent = gameboard.getField(index);
+        });
+    };
+
 
 
 
     const playRound = (index) => {
 
-        if(!gameboard.getGameboard().includes("")){
-            console.log("TIE!!!")
-            return;
-        }
-
-        if(checkWinner()){
-            if(currentplayer === player1){
-                console.log("Player 2 won, Please Restart");
-            }else{
-                console.log("Player 1 won, Please Restart");
-            }
-        }else if(gameboard.getField(index) !== ""){
+        if(gameboard.getField(index) !== ""){
             console.log("This field is occupied, please choose another field");
         }else{
             gameboard.addMarker(index, currentplayer.getPlayerMarker());
+            updateDisplay();
             currentplayer = (currentplayer === player1) ? player2 : player1;
-            console.log(gameboard.getGameboard());
+
+            if(!gameboard.getGameboard().includes("")){
+                console.log("TIE!!!")
+                return;
+            }
+
+            if(checkWinner()){
+                if(currentplayer === player1){
+                    console.log("Player 2 won, Please Restart");
+                    gameboard.resetGameboard();
+                    updateDisplay();
+                    return;
+                }else{
+                    console.log("Player 1 won, Please Restart");
+                    gameboard.resetGameboard();
+                    updateDisplay();
+                    return;
+                }
+            }
         }
         
     } 
 
-
+    createBoardUI();
     return{playRound}
 
 }
 
 const game1 = Gamecontroller();
 
-/*Tie Test*/
 
+
+/*Tie Test
 game1.playRound(0);
 game1.playRound(1);
-game1.playRound(2);
-game1.playRound(3);
 game1.playRound(4);
+game1.playRound(2);
 game1.playRound(5);
+game1.playRound(3);
 game1.playRound(6);
+game1.playRound(8);
 game1.playRound(7);
-
+*/
 
 /* Winner Test
 game1.playRound(0);
@@ -119,3 +156,5 @@ game1.playRound(4);
 game1.playRound(2);
 game1.playRound(7);
 game1.playRound(7);*/
+
+
