@@ -33,9 +33,15 @@ function createPlayer(name, marker){
 }
 
 
-function Gamecontroller(){
-    const player1 = createPlayer("Player 1", "X");
-    const player2 = createPlayer("Player 2", "O");
+function Gamecontroller(name1, name2){
+    const player1 = createPlayer(name1, "X");
+    const player2 = createPlayer(name2, "O");
+
+    const startScreen = document.getElementById("start-screen");
+    const gameScreen = document.getElementById("game-screen");
+    const endScreen = document.getElementById("end-screen");
+    const restartButton = document.getElementById("restart-btn");
+    const messageScreen = document.getElementById("result");
 
     let currentplayer = player1;
 
@@ -66,7 +72,7 @@ function Gamecontroller(){
         return false;
     };
 
-    const container = document.getElementById("container");
+    const container = document.getElementById("game-screen");
 
 
     const createBoardUI = () => {
@@ -93,6 +99,22 @@ function Gamecontroller(){
         });
     };
 
+    const showEndScreen = (msg) => {
+
+        gameScreen.classList.add("hidden");
+        container.innerHTML = "";
+        endScreen.classList.remove("hidden");
+
+        messageScreen.innerHTML = msg;
+
+        restartButton.addEventListener("click", () => {
+            endScreen.classList.add("hidden");
+            startScreen.classList.remove("hidden");
+
+        })
+
+    }
+
 
 
 
@@ -106,18 +128,18 @@ function Gamecontroller(){
             currentplayer = (currentplayer === player1) ? player2 : player1;
 
             if(!gameboard.getGameboard().includes("")){
-                console.log("TIE!!!")
+                showEndScreen("Its a TIE!");
                 return;
             }
 
             if(checkWinner()){
                 if(currentplayer === player1){
-                    console.log("Player 2 won, Please Restart");
+                    showEndScreen(`${player2.getPlayerName()}  Won, YAY!`);
                     gameboard.resetGameboard();
                     updateDisplay();
                     return;
                 }else{
-                    console.log("Player 1 won, Please Restart");
+                    showEndScreen(`${player2.getPlayerName()}  Won, YAY!`);
                     gameboard.resetGameboard();
                     updateDisplay();
                     return;
@@ -132,7 +154,6 @@ function Gamecontroller(){
 
 }
 
-const game1 = Gamecontroller();
 
 
 
@@ -157,4 +178,26 @@ game1.playRound(2);
 game1.playRound(7);
 game1.playRound(7);*/
 
+
+
+
+const startScreen = document.getElementById("start-screen");
+const gameScreen = document.getElementById("game-screen");
+
+const startButton = document.getElementById("start-btn");
+
+const player1Name = document.getElementById("player1-name");
+const player2Name = document.getElementById("player2-name");
+
+startButton.addEventListener("click", () => {
+
+    const player1 = player1Name.value;
+    const player2 = player2Name.value;
+
+    startScreen.classList.add("hidden");
+    gameScreen.classList.remove("hidden");
+
+    const game =  Gamecontroller(player1,player2);
+
+});
 
