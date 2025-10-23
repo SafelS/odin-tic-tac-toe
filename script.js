@@ -42,6 +42,7 @@ function Gamecontroller(name1, name2){
     const endScreen = document.getElementById("end-screen");
     const restartButton = document.getElementById("restart-btn");
     const messageScreen = document.getElementById("result");
+    
 
     let currentplayer = player1;
 
@@ -72,17 +73,28 @@ function Gamecontroller(name1, name2){
         return false;
     };
 
-    const container = document.getElementById("game-screen");
+
 
 
     const createBoardUI = () => {
-        container.innerHTML = ""; 
+        gameScreen.innerHTML = ""; 
+
+        const playerDisplay = document.createElement("div");
+        playerDisplay.id = "player-display"
+        playerDisplay.textContent = player1.getPlayerName() + " VS " + player2.getPlayerName();
+        gameScreen.appendChild(playerDisplay);
+
+        const gameTile = document.createElement("div");
+        gameTile.id = "game-field";
+        gameScreen.appendChild(gameTile);
+
+
         gameboard.getGameboard().forEach((field, index) => {
             const fieldDiv = document.createElement("div");
             fieldDiv.classList.add("field");
             fieldDiv.dataset.index = index;
             fieldDiv.textContent = field;
-            container.appendChild(fieldDiv);
+            gameTile.appendChild(fieldDiv);
 
 
             fieldDiv.addEventListener("click", () => {
@@ -102,7 +114,7 @@ function Gamecontroller(name1, name2){
     const showEndScreen = (msg) => {
 
         gameScreen.classList.add("hidden");
-        container.innerHTML = "";
+        gameScreen.innerHTML = "";
         endScreen.classList.remove("hidden");
 
         messageScreen.innerHTML = msg;
@@ -139,7 +151,7 @@ function Gamecontroller(name1, name2){
                     updateDisplay();
                     return;
                 }else{
-                    showEndScreen(`${player2.getPlayerName()}  Won, YAY!`);
+                    showEndScreen(`${player1.getPlayerName()}  Won, YAY!`);
                     gameboard.resetGameboard();
                     updateDisplay();
                     return;
@@ -156,33 +168,9 @@ function Gamecontroller(name1, name2){
 
 
 
-
-/*Tie Test
-game1.playRound(0);
-game1.playRound(1);
-game1.playRound(4);
-game1.playRound(2);
-game1.playRound(5);
-game1.playRound(3);
-game1.playRound(6);
-game1.playRound(8);
-game1.playRound(7);
-*/
-
-/* Winner Test
-game1.playRound(0);
-game1.playRound(3);
-game1.playRound(1);
-game1.playRound(4);
-game1.playRound(2);
-game1.playRound(7);
-game1.playRound(7);*/
-
-
-
-
 const startScreen = document.getElementById("start-screen");
 const gameScreen = document.getElementById("game-screen");
+
 
 const startButton = document.getElementById("start-btn");
 
